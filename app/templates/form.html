@@ -1,0 +1,46 @@
+<html>
+<head>
+    <script src='static/jquery.min.js'></script>
+    <script>
+	window.onload = function(){
+		bot = document.getElementById('bot');
+		input = document.getElementById('in');
+		output = document.getElementById('out');
+		bot.onclick = function(){
+		    //read input:
+		    str_in = input.value;
+			$.ajax({
+			    url: 'http://150.163.17.14:5002/api_gateway/lower_case?str_input='+str_in,
+			    dataType: 'json',
+			    crossOrigin: true,
+			    success: function(data){
+			        res_1 = data.lowercase_str;
+			        cripto_ajax(data.lowercase_str);
+			   }
+			}); //Ajax
+		} //button click
+
+		function cripto_ajax(str_data){
+		    $.ajax({
+			  url: 'http://150.163.17.14:5002/api_gateway/cripto?str_input='+str_data,
+			  dataType: 'json',
+			  crossOrigin: true,
+			  success: function(data){
+			        res_1 = data.cripto_str;
+			        output.value = res_1;
+			  }
+			});
+		} //cripto ajax
+
+	}//onload
+
+    </script>
+</head>
+<body>
+<form>
+    String de entrada <input id=in name="str_input"/><br/>
+    String de Saída: <input id="out"/><br/>
+    <button type="button" id="bot">Processar</button>
+</form>
+</body>
+</html>
