@@ -10,18 +10,18 @@ CORS(app)
 
 # This simulates service data that should come from database or
 # configuration file.
-sum_service_config = {'route':'/cripto', 'address':'localhost', 'port':5001}
-mult_service_config = {'route':'/lower_case', 'address':'localhost', 'port':5000}
+cripto_service = {'operation':'/cripto', 'address':'localhost', 'port':5001, 'route':'/cripto'}
+lowercase_service = {'operation':'/lower_case', 'address':'localhost', 'port':5000, 'route':'/lower_case'}
+persistence_service = {'operation':'/persistence', 'address':'localhost', 'port':8080, 'route':'/persistence/insert'}
 
-
-service_registry = [sum_service_config, mult_service_config]
+service_registry = [cripto_service, lowercase_service, persistence_service]
 
 @app.route('/api_gateway/<operation>')
 def api_gateway(operation):
     for service_config in service_registry:
-        if service_config['route'] == ('/'+operation):
+        if service_config['operation'] == ('/'+operation):
             parameters = { 'str_input': request.args.get('str_input')}
-            url = 'http://' + service_config['address'] +':' + str(service_config['port']) + service_config['route']
+            url = 'http://' + service_config['address'] +':' + str(service_config['port']) + service_config['route'] 
             url_request = req.urlopen(url+'?'+parse.urlencode(parameters))
             result = url_request.read()
             return result
